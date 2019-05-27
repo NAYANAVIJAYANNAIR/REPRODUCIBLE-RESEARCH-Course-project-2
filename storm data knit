@@ -1,0 +1,352 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning message:
+package ‘dplyr’ was built under R version 3.5.3 
+> library(ggplot2)
+Warning message:
+package ‘ggplot2’ was built under R version 3.5.3 
+> stormdata <- read.csv("StormData.csv.bz2", header = TRUE, sep = ",")
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'StormData.csv.bz2': No such file or directory
+> library("reshape")
+Error in library("reshape") : there is no package called ‘reshape’
+> library('scales')
+Warning message:
+package ‘scales’ was built under R version 3.5.3 
+> data <- read.csv(repdata_data_StormData,stringsAsFactors = FALSE))
+Error: unexpected ')' in "data <- read.csv(repdata_data_StormData,stringsAsFactors = FALSE))"
+> data <- read.csv(repdata_data_StormData,stringsAsFactors = FALSE)
+Error in read.table(file = file, header = header, sep = sep, quote = quote,  : 
+  object 'repdata_data_StormData' not found
+> zipFileName <- "StormData.csv.bz2"
+> fileURL <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+> if (!file.exists(zipFileName)){
++   download.file(fileURL, zipFileName, method="curl")
++ }  
+Error in download.file(fileURL, zipFileName, method = "curl") : 
+  'curl' call had nonzero exit status
+> data <- read.csv(zipFileName, stringsAsFactors = FALSE)
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'StormData.csv.bz2': No such file or directory
+> setwd("C:/Users/NAYANA NAIR/Documents/cert/Reproducible research")
+> data <- read.csv(zipFileName, stringsAsFactors = FALSE)
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'StormData.csv.bz2': No such file or directory
+> stormdata <- read.csv("StormData.csv.bz2", header = TRUE, sep = ",")
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'StormData.csv.bz2': No such file or directory
+> if (!"datafile.csv.bz2" %in% dir("./")) {
++         download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","datafile.csv.bz2")
++ }
+trying URL 'https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2'
+Error in download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",  : 
+  cannot open URL 'https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2'
+In addition: Warning message:
+In download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",  :
+  InternetOpenUrl failed: 'The operation timed out'
+> 
+> if(!"weatherdata" %in% ls()) {
++         weatherdata <- read.csv("datafile.csv.bz2")
++ 
++ }
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file 'datafile.csv.bz2': No such file or directory
+> weatherdataclean <- data.frame(weatherdata$EVTYPE,weatherdata$FATALITIES, weatherdata$INJURIES)
+Error in data.frame(weatherdata$EVTYPE, weatherdata$FATALITIES, weatherdata$INJURIES) : 
+  object 'weatherdata' not found
+> colnames(weatherdataclean) = c("EVTYPE", "FATALITIES", "INJURIES")
+Error in colnames(weatherdataclean) = c("EVTYPE", "FATALITIES", "INJURIES") : 
+  object 'weatherdataclean' not found
+> download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", "stormdata.csv.bz2")
+trying URL 'https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2'
+Content type 'application/bzip2' length 49177144 bytes (46.9 MB)
+downloaded 46.9 MB
+
+> data <- read.csv(bzfile("stormdata.csv.bz2"))
+> aggregatedInjuriesDT <- aggregate(INJURIES~EVTYPE, data, sum)
+> aggregatedFatalitiesDT <- aggregate(FATALITIES~EVTYPE, data, sum)
+> aggregatedPropDmgDT <- aggregate(PROPDMG~EVTYPE, data, sum)
+> aggregatedCropDmgDT <- aggregate(CROPDMG~EVTYPE, data, sum)
+> sortedInjuriesDT <- aggregatedInjuriesDT[order(aggregatedInjuriesDT$INJURIES , aggregatedInjuriesDT$EVTYPE, decreasing = TRUE), ]
+> sortedFatalitiesDT <- aggregatedFatalitiesDT[order(aggregatedFatalitiesDT$FATALITIES , aggregatedFatalitiesDT$EVTYPE, decreasing = TRUE), ]
+> sortedPropDmgDT <- aggregatedPropDmgDT[order(aggregatedPropDmgDT$PROPDMG , aggregatedPropDmgDT$EVTYPE, decreasing = TRUE), ]
+> sortedCropDmgDT <- aggregatedCropDmgDT[order(aggregatedCropDmgDT$CROPDMG , aggregatedCropDmgDT$EVTYPE, decreasing = TRUE), ]
+> mostHarmfulInjuriesEvents <- head(sortedInjuriesDT, n = 10)
+> mostHarmfulFatalitiesEvents <- head(sortedFatalitiesDT, n = 10)
+> mostHarmfulPropDmgEvents <- head(sortedPropDmgDT, n = 10)
+> mostHarmfulCropDmgEvents <- head(sortedCropDmgDT, n = 10)
+> library(gridExtra)
+Error in library(gridExtra) : there is no package called ‘gridExtra’
+> install.packages(gridExtra)
+Error in install.packages(gridExtra) : object 'gridExtra' not found
+> p1 <- qplot(INJURIES, EVTYPE, data = mostHarmfulInjuriesEvents , xlab="Number of Injuries", ylab="Event Type")
+> p2 <- qplot(FATALITIES, EVTYPE, data = mostHarmfulFatalitiesEvents , xlab="Number of Fatalities", ylab="Event Type")
+> p3 <- qplot(PROPDMG, EVTYPE, data = mostHarmfulPropDmgEvents, xlab="Property Damage", ylab="Event Type")
+> p4 <- qplot(CROPDMG, EVTYPE, data = mostHarmfulCropDmgEvents, xlab="crop Damage", ylab="Event Type")
+> 
+> grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+Error in grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2) : 
+  could not find function "grid.arrange"
+> install.packages(gridextra)
+Error in install.packages(gridextra) : object 'gridextra' not found
+>  https://CRAN.R-project.org/package=gridExtra
+Error: unexpected '/' in " https:/"
+> install.packages(grid)
+Installing package into ‘C:/Users/NAYANA NAIR/Documents/R/win-library/3.5’
+(as ‘lib’ is unspecified)
+Error in as.character(x) : 
+  cannot coerce type 'closure' to vector of type 'character'
+> install.packages("gridExtra", repos="http://R-Forge.R-project.org")
+Installing package into ‘C:/Users/NAYANA NAIR/Documents/R/win-library/3.5’
+(as ‘lib’ is unspecified)
+installing the source package ‘gridExtra’
+
+trying URL 'http://R-Forge.R-project.org/src/contrib/gridExtra_0.8.1.tar.gz'
+Content type 'application/x-gzip' length 25689 bytes (25 KB)
+downloaded 25 KB
+
+* installing *source* package 'gridExtra' ...
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+  converting help for package 'gridExtra'
+    finding HTML links ... done
+    arcTextGrob                             html  
+    arrangeGrob                             html  
+    barbedGrob                              html  
+    borderGrob                              html  
+    colorstripGrob                          html  
+    ebimageGrob                             html  
+    ellipseGrob                             html  
+    expand.arguments                        html  
+    gridExtra-package                       html  
+    interleaven                             html  
+    ngonGrob                                html  
+    patternGrob                             html  
+    pixmapGrob                              html  
+    polygon.regular                         html  
+    polygon.star                            html  
+    polygon1                                html  
+    read.tiff                               html  
+    rowMax.units                            html  
+    rpatternGrob                            html  
+    tableGrob                               html  
+    theme.default                           html  
+    virtualGrob                             html  
+** building package indices
+** testing if installed package can be loaded
+*** arch - i386
+*** arch - x64
+* DONE (gridExtra)
+In R CMD INSTALL
+
+The downloaded source packages are in
+        ‘C:\Users\NAYANA NAIR\AppData\Local\Temp\Rtmpg1oHCw\downloaded_packages’
+> 
+> 
+> library(gridExtra)
+Loading required package: grid
+> p1 <- qplot(INJURIES, EVTYPE, data = mostHarmfulInjuriesEvents , xlab="Number of Injuries", ylab="Event Type")
+> p2 <- qplot(FATALITIES, EVTYPE, data = mostHarmfulFatalitiesEvents , xlab="Number of Fatalities", ylab="Event Type")
+> p3 <- qplot(PROPDMG, EVTYPE, data = mostHarmfulPropDmgEvents, xlab="Property Damage", ylab="Event Type")
+> p4 <- qplot(CROPDMG, EVTYPE, data = mostHarmfulCropDmgEvents, xlab="crop Damage", ylab="Event Type")
+> 
+> grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+Error in switch(ct, ggplot = ggplotGrob(grobs[[ii.table]]), trellis = latticeGrob(grobs[[ii.table]]),  : 
+  EXPR must be a length 1 vector
+> data$BGN_DATE <- as.Date(data$BGN_DATE, format = "%m/%d/%Y")
+> 
+> data <- subset(data, BGN_DATE >= as.Date("1966-01-01"))
+> neededCols <- c("BGN_DATE",
++                   "EVTYPE",
++                   "FATALITIES",
++                   "INJURIES",
++                   "PROPDMG",
++                   "PROPDMGEXP",
++                   "CROPDMG",
++                   "CROPDMGEXP")
+> data <- subset(data,
++                select = neededCols,
++                (grepl(EVTYPE, pattern = "*Summary*", ignore.case = TRUE) == FALSE))
+> data[data$EVTYPE == "TSTM WIND", ]$EVTYPE = "THUNDERSTORM WIND"
+> data[data$EVTYPE == "THUNDERSTORM WINDS", ]$EVTYPE = "THUNDERSTORM WIND"
+> data[data$EVTYPE == "RIVER FLOOD", ]$EVTYPE = "FLOOD"
+> data[data$EVTYPE == "HURRICANE/TYPHOON", ]$EVTYPE = "HURRICANE-TYPHOON"
+Warning message:
+In `[<-.factor`(`*tmp*`, iseq, value = c("HURRICANE-TYPHOON", "HURRICANE-TYPHOON",  :
+  invalid factor level, NA generated
+> data[data$EVTYPE == "HURRICANE", ]$EVTYPE = "HURRICANE-TYPHOON"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "HURRICANE", , value = list( : 
+  missing values are not allowed in subscripted assignments of data frames
+> exponentLookup <- data.frame(DMGEXP = c("",
++                                         "-",
++                                         "?",
++                                         "+",
++                                         "0",
++                                         "1",
++                                         "2",
++                                         "3",
++                                         "4",
++                                         "5",
++                                         "6",
++                                         "7",
++                                         "8",
++                                         "B",
++                                         "H",
++                                         "K",
++                                         "M"
++                                         ),
++                              EXP = c(1,          #            
++                                      1,          # -
++                                      1,          # ?
++                                      1,          # +
++                                      1,          # 0
++                                      10,         # 1
++                                      100,        # 2
++                                      1000,       # 3
++                                      10000,      # 4
++                                      100000,     # 5
++                                      1000000,    # 6
++                                      10000000,   # 7
++                                      100000000,  # 8
++                                      1000000000, # B
++                                      100,        # H
++                                      1000,       # K
++                                      1000000     # M
++                                     ),
++                              stringsAsFactors = FALSE
++                              )
+> data[data$EVTYPE == "TSTM WIND", ]$EVTYPE = "THUNDERSTORM WIND"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "TSTM WIND", , value = list( : 
+  missing values are not allowed in subscripted assignments of data frames
+> data[data$EVTYPE == "THUNDERSTORM WINDS", ]$EVTYPE = "THUNDERSTORM WIND"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "THUNDERSTORM WINDS",  : 
+  missing values are not allowed in subscripted assignments of data frames
+> data[data$EVTYPE == "RIVER FLOOD", ]$EVTYPE = "FLOOD"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "RIVER FLOOD", , value = list( : 
+  missing values are not allowed in subscripted assignments of data frames
+> data[data$EVTYPE == "HURRICANE/TYPHOON", ]$EVTYPE = "HURRICANE-TYPHOON"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "HURRICANE/TYPHOON",  : 
+  missing values are not allowed in subscripted assignments of data frames
+> data[data$EVTYPE == "HURRICANE", ]$EVTYPE = "HURRICANE-TYPHOON"
+Error in `[<-.data.frame`(`*tmp*`, data$EVTYPE == "HURRICANE", , value = list( : 
+  missing values are not allowed in subscripted assignments of data frames
+> data$PROPDMGEXP <- toupper(data$PROPDMGEXP)
+> data$CROPDMGEXP <- toupper(data$CROPDMGEXP)
+> data <- merge(x = data, y = exponentLookup,
++                 by.x = "PROPDMGEXP", by.y = "DMGEXP",
++                 all.x = TRUE)
+> names(data)[names(data)== "EXP"] <- "PROPEXP"
+> 
+> data <- merge(x = data, y = exponentLookup,
++                 by.x = "CROPDMGEXP", by.y = "DMGEXP",
++                 all.x = TRUE)
+> names(data)[names(data)== "EXP"] <- "CROPEXP"
+> 
+> data$PropDamageAmount <- data$PROPDMG * data$PROPEX
+> data$CropDamageAmount <- data$CROPDMG  * data$CROPEXP
+> clean <- function(x) {
++   x <- toupper(x)
++ x <- sub("\\\\", " ", x) 
++ x <- sub("-", " ", x)
++ x <- sub("/", " ", x)
++  x <- gsub("\\s+", " ", x) 
++ x <- trimws(x)
++ }
+> 
+> data$EVTYPE <- apply(data.frame(data$EVTYPE), 2, clean)
+> fatalityTop5 <- aggregate(list(Freq=data$FATALITIES),
++                               list(EventType=data$EVTYPE),
++                               sum)
+> fatalityTop5 <- head(fatalityTop5[order(-fatalityTop5$Freq),], n=5)
+> injuryTop5 <- aggregate(list(Freq=data$INJURIES),
++                             list(EventType=data$EVTYPE),
++                             sum)
+> injuryTop5 <- head(injuryTop5[order(-injuryTop5$Freq),], n=5)
+> ggplot(data=fatalityTop5, aes(x=reorder(EventType, Freq), y=Freq)) + 
++     geom_bar(stat="identity") +
++     ggtitle(label = "Top 5 Severe Weather Events with the Highest Total Fatalities") + 
++     labs(x = "Event Type", y = "Count") +
++     coord_flip()
+> ggplot(data=injuryTop5, aes(x=reorder(EventType, Freq), y=Freq)) + 
++     geom_bar(stat="identity") +
++     ggtitle(label = "Top 5 Severe Weather Events with the Highest Total Injuries") + 
++     labs(x = "Event Type", y = "Count") +
++     coord_flip()
+> 
+> 
+> PropertyDamageTop5 <- aggregate(
++                                list(PropDamageAmount=data$PropDamageAmount,
++                                     CropDamageAmount=data$CropDamageAmount),
++                                list(EVTYPE=data$EVTYPE),
++                                sum)
+> 
+> PropertyDamageTop5$TotalDamageAmount <- PropertyDamageTop5$PropDamageAmount + PropertyDamageTop5$CropDamageAmount
+> PropertyDamageTop5 <- PropertyDamageTop5[order(-PropertyDamageTop5$TotalDamageAmount),]
+> PropertyDamageTop5 <- head(PropertyDamageTop5, n=5)
+> PropertyDamageTop5 <- melt(PropertyDamageTop5[,-4])
+Error in melt(PropertyDamageTop5[, -4]) : could not find function "melt"
+> names(PropertyDamageTop5)[names(PropertyDamageTop5) == "variable"] <- "TypOfDamage"
+> names(PropertyDamageTop5)[names(PropertyDamageTop5) == "value"] <- "Amount"
+> levels(PropertyDamageTop5$TypOfDamage)[levels(PropertyDamageTop5$TypOfDamage) == "PropDamageAmount"] <- "Property Damage Amount"
+Error in levels(PropertyDamageTop5$TypOfDamage)[levels(PropertyDamageTop5$TypOfDamage) ==  : 
+  attempt to set an attribute on NULL
+> levels(PropertyDamageTop5$TypOfDamage)[levels(PropertyDamageTop5$TypOfDamage) == "CropDamageAmount"] <- "Crop Damage Amount"
+Error in levels(PropertyDamageTop5$TypOfDamage)[levels(PropertyDamageTop5$TypOfDamage) ==  : 
+  attempt to set an attribute on NULL
+> ggplot(data=PropertyDamageTop5, 
++       aes(x=reorder(EVTYPE, Amount), y=Amount, fill=TypOfDamage)) + 
++       scale_fill_grey(start = 0, end = 0.9) + 
++       theme(legend.position="bottom") +
++       guides(fill=guide_legend(title=NULL)) + 
++       geom_bar(stat="identity", colour="black") +
++       ggtitle(label = "Top 5 Severe Weather Events with the Highest Economic Damage") + 
++       labs(x = "Event Type", y = "Amount of Damage in USD") + 
++       scale_y_continuous(labels = dollar) + 
++       coord_flip()
+Error in tapply(X = X, INDEX = x, FUN = FUN, ...) : 
+  object 'Amount' not found
+> 
